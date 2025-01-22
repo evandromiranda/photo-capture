@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capture sua Foto</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    video {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Capture sua Foto</h2>
+  <video id="video" autoplay></video>
+  <button id="capture">Tirar Foto</button>
+  <canvas id="canvas" width="400" height="300"></canvas>
+
+  <script>
+    const video = document.querySelector("#video");
+    const canvas = document.querySelector("#canvas");
+    const context = canvas.getContext("2d");
+    const captureButton = document.querySelector("#capture");
+
+    // Acesso à câmera do dispositivo
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+      })
+      .catch((err) => console.error("Erro ao acessar a câmera:", err));
+
+    captureButton.addEventListener("click", () => {
+      // Ajusta o tamanho do canvas ao tamanho do vídeo
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Obtém a imagem capturada
+      const image = canvas.toDataURL("image/png");
+      console.log("Foto capturada:", image);
+
+      // Alerta de foto capturada
+      alert("Foto capturada com sucesso!");
+    });
+  </script>
+</body>
+</html>
