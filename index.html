@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Capture sua Foto</title>
+</head>
+<body>
+  <h2>Capture sua Foto</h2>
+  <video id="video" width="320" height="240" autoplay></video>
+  <button id="capture">Tirar Foto</button>
+  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+  <script>
+    const video = document.querySelector("#video");
+    const canvas = document.querySelector("#canvas");
+    const context = canvas.getContext("2d");
+    const captureButton = document.querySelector("#capture");
+
+    // Acesso à câmera do dispositivo
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+      })
+      .catch((err) => console.error("Erro ao acessar a câmera:", err));
+
+    captureButton.addEventListener("click", () => {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const image = canvas.toDataURL("image/png");
+      // Aqui você pode enviar a imagem para um servidor ou exibir na tela
+      console.log("Foto capturada:", image);
+      alert("Foto capturada! Verifique o console do navegador.");
+    });
+  </script>
+</body>
+</html>
